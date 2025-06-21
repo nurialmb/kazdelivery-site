@@ -669,51 +669,23 @@ footer {
     display: none;
   }
 }
+
 @media (max-width: 768px) {
-  footer .container p:nth-child(2) {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-  }
-
-  footer .container p:nth-child(2)::after {
-    content: "📱 WhatsApp: +7 (700) 978-61-68";
-    display: block;
-  }
-
-  footer .container p:nth-child(2) {
-    white-space: pre-line;
-  }
-
-  footer .container p:nth-child(2) {
-    font-size: 15px;
+  .footer-contact {
+    text-align: center;
     line-height: 1.6;
-  }
-
-  footer .container p:nth-child(2)::before {
-    content: "📧 kazdelivery@gmail.com 📞 +7 (707) 835-01-01";
-    white-space: pre-line;
-    display: block;
-  }
-
-  footer .container p:nth-child(2) {
     font-size: 15px;
-    line-height: 1.6;
-  }
-
-  footer .container p:nth-child(2) {
     color: white;
   }
 
-  /* Hide original content */
-  footer .container p:nth-child(2) {
-    font-size: 0;
+  .footer-contact a {
+    color: white;
+    text-decoration: none;
+    word-break: break-word;
   }
 
-  footer .container p:nth-child(2)::before,
-  footer .container p:nth-child(2)::after {
-    font-size: 15px;
+  .footer-contact a:hover {
+    text-decoration: underline;
   }
 }
 
