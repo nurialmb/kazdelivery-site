@@ -474,6 +474,12 @@ const product = productData[parseInt(id)];
 if (product) {
   // === 1. Set dynamic <title> ===
   document.title = `${product.name} | KAZDELIVERY`;
+  // === 1.1 Set dynamic <link rel="canonical"> ===
+  const canonical = document.createElement("link");
+  canonical.rel = "canonical";
+  canonical.href = `${window.location.origin}${window.location.pathname}${window.location.search}`;
+  document.head.appendChild(canonical);
+
 
   // === 2. Set meta description dynamically ===
   const meta = document.createElement("meta");
