@@ -5,6 +5,10 @@
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ffffff",
+  "orientation": "portrait",
+  "scope": "/",
+  "lang": "ru",
+  "description": "Промышленная химия и поставки от KAZDELIVERY",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",
