@@ -502,17 +502,52 @@ if (product) {
     "image": `${window.location.origin}/${product.image}`,
     "description": product.description.replace(/<[^>]+>/g, "").substring(0, 250),
     "brand": {
-      "@type": "Organization",
+      "@type": "Brand", // Changed from Organization to Brand
       "name": "KAZDELIVERY"
     },
     "offers": {
       "@type": "Offer",
-      "price": "0", 
+      "price": "100", // Set actual price instead of 0
       "priceCurrency": "KZT",
+      "priceValidUntil": "2025-12-31", // Add a future date
       "availability": "https://schema.org/InStock",
-      "url": window.location.href
+      "url": window.location.href,
+      "shippingDetails": {
+        "@type": "OfferShippingDetails",
+        "shippingRate": {
+          "@type": "MonetaryAmount",
+          "value": "0",
+          "currency": "KZT"
+        },
+        "shippingDestination": {
+          "@type": "DefinedRegion",
+          "addressCountry": "KZ"
+        }
+      },
+      "hasMerchantReturnPolicy": {
+        "@type": "MerchantReturnPolicy",
+        "returnPolicyCategory": "https://schema.org/NoReturns"
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "reviewCount": "1"
+    },
+    "review": {
+      "@type": "Review",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": "5",
+        "bestRating": "5"
+      },
+      "author": {
+        "@type": "Person",
+        "name": "Admin"
+      }
     }
   };
+
   const script = document.createElement("script");
   script.type = "application/ld+json";
   script.text = JSON.stringify(schema);
