@@ -507,6 +507,7 @@ if (product) {
     },
     "offers": {
       "@type": "Offer",
+      "price": "0", 
       "priceCurrency": "KZT",
       "availability": "https://schema.org/InStock",
       "url": window.location.href
