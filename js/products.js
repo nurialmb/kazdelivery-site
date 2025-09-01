@@ -201,19 +201,34 @@ function renderPagination() {
   const totalPages = Math.ceil(products.length / itemsPerPage);
   const pagination = document.getElementById("pagination");
   pagination.innerHTML = "";
+  pagination.setAttribute("aria-label", "Pagination");
 
   for (let i = 1; i <= totalPages; i++) {
-    const btn = document.createElement("button");
-    btn.textContent = i;
-    btn.classList.add("pagination-btn");
-    if (i === currentPage) btn.classList.add("active");
-    btn.addEventListener("click", () => {
+    const a = document.createElement("a");
+    a.textContent = i;
+    a.classList.add("pagination-btn");
+    if (i === currentPage) a.classList.add("active");
+
+    a.href = i === 1 ? "products.html" : `products.html?page=${i}`;
+    a.addEventListener("click", (e) => {
+      e.preventDefault();
       currentPage = i;
       renderProducts(currentPage);
+      history.pushState(null, "", a.href);
+
+      // keep canonical aligned
+      const can = document.getElementById("canonical-products");
+      if (can) {
+        can.href = i === 1
+          ? "https://qzd.kz/products.html"
+          : `https://qzd.kz/products.html?page=${i}`;
+      }
     });
-    pagination.appendChild(btn);
+
+    pagination.appendChild(a);
   }
 }
+
 
 // Initial load
 renderProducts(currentPage);
