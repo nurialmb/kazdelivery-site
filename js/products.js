@@ -149,25 +149,24 @@ function renderProducts(page) {
   const paginatedItems = products.slice(start, end);
 
   paginatedItems.forEach((product, index) => {
-  const actualIndex = (currentPage - 1) * itemsPerPage + index;
-  const card = document.createElement("div");
-  card.classList.add("product-card");
+    const actualIndex = (page - 1) * itemsPerPage + index; // use the page arg
+    const card = document.createElement("div");
+    card.classList.add("product-card");
 
-  card.setAttribute("data-name", product.name.toLowerCase());
-  card.innerHTML = `
-  <h3><a href="product.html?id=${actualIndex}&page=${currentPage}">${product.name}</a></h3>
-  `;
+    card.setAttribute("data-name", product.name.toLowerCase());
 
+    // ✅ only add ?page=N when N > 1
+    const pageQS = page > 1 ? `&page=${page}` : "";
+    card.innerHTML = `
+      <h3><a href="product.html?id=${actualIndex}${pageQS}">${product.name}</a></h3>
+    `;
 
-
-
-  container.appendChild(card);
-});
-
-  
+    container.appendChild(card);
+  });
 
   renderPagination();
 }
+
 function filterProducts() {
   const query = document.getElementById("searchInput").value.toLowerCase();
   const container = document.getElementById("productContainer");
