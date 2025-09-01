@@ -463,10 +463,17 @@ const productData = [
 },
 ];
 
-const urlParams = new URLSearchParams(window.location.search);
+// Read params
+const urlParams = new URLSearchParams(location.search);
 const id = urlParams.get("id");
-const page = urlParams.get("page") || 1;
-document.getElementById("backLink").href = `products.html?page=${page}`;
+
+// Set "Back to products" without ?page=1
+const pageParam = parseInt(urlParams.get("page") || "1", 10);
+const backLink = document.getElementById("backLink");
+if (backLink) {
+  backLink.href = pageParam > 1 ? `products.html?page=${pageParam}` : `products.html`;
+}
+
 
 
 // ✅ SAFELY parse and check product
