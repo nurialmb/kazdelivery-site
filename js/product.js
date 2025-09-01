@@ -475,10 +475,13 @@ if (product) {
   // === 1. Set dynamic <title> ===
   document.title = `${product.name} | KAZDELIVERY`;
   // === 1.1 Set dynamic <link rel="canonical"> ===
-  const canonical = document.createElement("link");
-  canonical.rel = "canonical";
-  canonical.href = `${window.location.origin}${window.location.pathname}${window.location.search}`;
-  document.head.appendChild(canonical);
+  const canonicalEl = document.getElementById("canonical") || document.createElement("link");
+  canonicalEl.rel = "canonical";
+  const preferredOrigin = "https://qzd.kz";
+  const canonicalUrl = new URL(`${preferredOrigin}${window.location.pathname}`);
+  if (id !== null) canonicalUrl.search = `?id=${encodeURIComponent(id)}`;
+  canonicalEl.href = canonicalUrl.toString();
+  if (!canonicalEl.parentNode) document.head.appendChild(canonicalEl);
 
 
   // === 2. Set meta description dynamically ===
