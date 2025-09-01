@@ -83,5 +83,23 @@
   </div>
   </footer>
   <script src="js/products.js"></script>
+  <script>
+  (function () {
+    const params = new URLSearchParams(location.search);
+    const page = parseInt(params.get('page') || '1', 10);
+
+    const el = document.getElementById('canonical-products') || (function () {
+      const l = document.createElement('link');
+      l.rel = 'canonical';
+      l.id  = 'canonical-products';
+      document.head.appendChild(l);
+      return l;
+    })();
+
+    el.href = page > 1
+      ? `https://qzd.kz/products.html?page=${page}`
+      : `https://qzd.kz/products.html`;
+  })();
+  </script>
 </body>
 </html>
