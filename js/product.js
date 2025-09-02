@@ -463,111 +463,90 @@ const productData = [
 },
 ];
 
-// Read params
+// --- Params & canonical (run before rendering) ---
 const urlParams = new URLSearchParams(location.search);
-const id = urlParams.get("id");
-
-// Set "Back to products" without ?page=1
+const idParam = urlParams.get("id");
 const pageParam = parseInt(urlParams.get("page") || "1", 10);
+
+// Set canonical regardless of product existence
+const preferredOrigin = "https://qzd.kz";
+const canonicalEl = document.getElementById("canonical") || document.createElement("link");
+canonicalEl.rel = "canonical";
+const canonicalUrl = new URL(`${preferredOrigin}${location.pathname}`);
+if (idParam !== null) {
+  canonicalUrl.search = `?id=${encodeURIComponent(idParam)}`;
+}
+canonicalEl.href = canonicalUrl.toString();
+if (!canonicalEl.parentNode) document.head.appendChild(canonicalEl);
+
+// Back link (avoid ?page=1)
 const backLink = document.getElementById("backLink");
 if (backLink) {
   backLink.href = pageParam > 1 ? `products.html?page=${pageParam}` : `products.html`;
 }
 
+// --- Render product ---
+const idx = Number.isInteger(parseInt(idParam, 10)) ? parseInt(idParam, 10) : -1;
+const product = productData[idx];
 
-
-// ✅ SAFELY parse and check product
-const product = productData[parseInt(id)];
 if (product) {
-  // === 1. Set dynamic <title> ===
+  // 1) Title
   document.title = `${product.name} | KAZDELIVERY`;
-  // === 1.1 Set dynamic <link rel="canonical"> ===
-  const canonicalEl = document.getElementById("canonical") || document.createElement("link");
-  canonicalEl.rel = "canonical";
-  const preferredOrigin = "https://qzd.kz";
-  const canonicalUrl = new URL(`${preferredOrigin}${window.location.pathname}`);
-  if (id !== null) canonicalUrl.search = `?id=${encodeURIComponent(id)}`;
-  canonicalEl.href = canonicalUrl.toString();
-  if (!canonicalEl.parentNode) document.head.appendChild(canonicalEl);
 
-
-  // === 2. Set meta description dynamically ===
+  // 2) Meta description
   const meta = document.createElement("meta");
   meta.name = "description";
   meta.content = `${product.name} — ${product.description.replace(/<[^>]+>/g, "").substring(0, 160)}... Оптовые поставки от KAZDELIVERY.`;
   document.head.appendChild(meta);
 
-  // === 3. Add favicon (if not already in HTML) ===
-  const favicon = document.createElement("link");
-  favicon.rel = "icon";
-  favicon.href = "favicon.ico"; // Change path if needed
-  favicon.type = "image/x-icon";
-  document.head.appendChild(favicon);
+  // 3) (Optional) Favicon — you already have favicons in HTML head, so this can be skipped
+  // const favicon = document.createElement("link");
+  // favicon.rel = "icon";
+  // favicon.href = "favicon.ico";
+  // favicon.type = "image/x-icon";
+  // document.head.appendChild(favicon);
 
-  // === 4. Add JSON-LD schema ===
+  // 4) JSON-LD
   const schema = {
     "@context": "https://schema.org",
     "@type": "Product",
     "name": product.name,
     "image": `${window.location.origin}/${product.image}`,
     "description": product.description.replace(/<[^>]+>/g, "").substring(0, 250),
-    "brand": {
-      "@type": "Brand", // Changed from Organization to Brand
-      "name": "KAZDELIVERY"
-    },
+    "brand": { "@type": "Brand", "name": "KAZDELIVERY" },
     "offers": {
       "@type": "Offer",
-      "price": "100", // Set actual price instead of 0
+      "price": "100",
       "priceCurrency": "KZT",
-      "priceValidUntil": "2025-12-31", // Add a future date
+      "priceValidUntil": "2025-12-31",
       "availability": "https://schema.org/InStock",
       "url": window.location.href,
       "shippingDetails": {
         "@type": "OfferShippingDetails",
-        "shippingRate": {
-          "@type": "MonetaryAmount",
-          "value": "0",
-          "currency": "KZT"
-        },
-        "shippingDestination": {
-          "@type": "DefinedRegion",
-          "addressCountry": "KZ"
-        }
+        "shippingRate": { "@type": "MonetaryAmount", "value": "0", "currency": "KZT" },
+        "shippingDestination": { "@type": "DefinedRegion", "addressCountry": "KZ" }
       },
       "hasMerchantReturnPolicy": {
         "@type": "MerchantReturnPolicy",
         "returnPolicyCategory": "https://schema.org/NoReturns"
       }
     },
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "5",
-      "reviewCount": "1"
-    },
+    "aggregateRating": { "@type": "AggregateRating", "ratingValue": "5", "reviewCount": "1" },
     "review": {
       "@type": "Review",
-      "reviewRating": {
-        "@type": "Rating",
-        "ratingValue": "5",
-        "bestRating": "5"
-      },
-      "author": {
-        "@type": "Person",
-        "name": "Admin"
-      }
+      "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+      "author": { "@type": "Person", "name": "Admin" }
     }
   };
-
   const script = document.createElement("script");
   script.type = "application/ld+json";
   script.text = JSON.stringify(schema);
   document.head.appendChild(script);
 
-  // === 5. Render product details ===
+  // 5) Render details
   const container = document.getElementById("productDetails");
   const detailsWrapper = document.createElement("section");
   detailsWrapper.classList.add("product-section");
-
   detailsWrapper.innerHTML = `
     <h1 class="product-name">${product.name}</h1>
     <div class="product-detail-grid">
@@ -583,9 +562,9 @@ if (product) {
       </div>
     </div>
   `;
-
   container.appendChild(detailsWrapper);
 }
+
 
 
 
