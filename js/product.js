@@ -462,6 +462,7 @@ const productData = [
   minVolume: "Мешки по 25-50 кг, биг-бэги по 1 тонне"
 },
 ];
+console.log("product.js running", location.href);
 
 // --- Params & canonical (run before rendering) ---
 const urlParams = new URLSearchParams(location.search);
